@@ -1,0 +1,14 @@
+# general
+.DS_Store
+
+# ansible
+*.retry
+*/__pycache__
+*.pyc
+.cache
+
+# secrets
+.env
+secret/
+secrets/
+vault_password

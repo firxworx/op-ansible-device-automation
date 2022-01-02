@@ -1,0 +1,34 @@
+# https://editorconfig.org/
+
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+end_of_line = lf
+charset = utf-8
+
+[*.{py}]
+indent_size = 4
+indent_style = space
+max_line_length = 120
+
+[*.{j2,tf,hcl,yml,yaml}]
+indent_size = 2
+indent_style = space
+max_line_length = 120
+
+[*.json]
+indent_size = 2
+insert_final_newline = ignore
+
+[Makefile]
+indent_style = tab
+
+[*.bat]
+indent_style = tab
+
+[docs/**.txt]
+max_line_length = 80

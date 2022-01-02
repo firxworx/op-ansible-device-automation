@@ -1,0 +1,23 @@
+# @link <https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html>
+
+[localhost]
+127.0.0.1
+
+[localhost:vars]
+ansible_connection=local
+ansible_become=no
+
+[upboard]
+192.168.0.24
+
+[upboard:vars]
+ansible_connection=ssh
+ansible_user=firxworx
+ansible_become_password="firxworx"
+
+[all:vars]
+ansible_python_interpreter=python3
+
+# ansible_ssh_common_args="-o StrictHostKeyChecking=no"
+# ansible_python_interpreter=/usr/bin/python3.6
+# host_key_checking=False
