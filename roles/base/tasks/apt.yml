@@ -1,0 +1,24 @@
+---
+# base role - tasks/apt.yml - update apt cache, update + install packages
+
+- name: update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  changed_when: false
+
+- name: ensure aptitude (dependency of ansible apt module) is installed
+  apt:
+    pkg: aptitude
+    state: present
+    autoremove: yes
+
+- name: upgrade existing packages
+  apt:
+    upgrade: yes
+
+- name: install common packages
+  apt:
+    pkg: "{{ apt_packages }}"
+    state: present
+    autoremove: yes

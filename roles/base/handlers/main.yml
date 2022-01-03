@@ -1,0 +1,10 @@
+---
+# base role - handlers/main.yml - role handlers
+
+- name: update tzdata
+  command: /usr/sbin/dpkg-reconfigure --frontend noninteractive tzdata
+
+- name: restart cron
+  systemd:
+    name: cron
+    state: restarted

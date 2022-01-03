@@ -1,0 +1,14 @@
+---
+# base role - tasks/main.yml - main task orchestration for this role
+
+- name: set timezone
+  import_tasks: tz.yml
+
+- name: set locale
+  import_tasks: locale.yml
+
+- name: install base apt packages
+  import_tasks: apt.yml
+#
+# - name: ensure required users and groups
+#  import_tasks: users.yml

@@ -1,0 +1,25 @@
+---
+# base role - tasks/users.yml - ensure users and groups exist as required by this project
+
+- name: "ensure project group '{{ project_group }}' exists"
+  group:
+    name: "{{ project_group }}"
+    state: present
+
+- name: "ensure project users exist and are members of required groups: audio, video"
+  user:
+    name: "{{ item }}"
+    create_home: yes
+    shell: /bin/bash
+    groups:
+      - audio
+      - video
+  with_items: "{{ project_users }}"
+
+- name: "ensure {{ control_user }} ownership of their home directory and ensure 0700 permissions"
+  file:
+    path: "/home/{{ control_user }}"
+    owner: "{{ control_user }}"
+    group: "{{ control_user }}"
+    state: directory
+    mode: 0700

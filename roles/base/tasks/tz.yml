@@ -1,0 +1,9 @@
+---
+# base role - tasks/tz.yml - set timezone and update tzdata
+
+- name: "set timezone to {{ tz }}"
+  timezone:
+    name: "{{ tz }}"
+  notify:
+    - update tzdata
+    - restart cron

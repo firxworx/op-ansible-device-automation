@@ -1,0 +1,12 @@
+---
+# base role - tasks/locale.yml - update apt cache, update + install packages
+
+- name: ensure locale exists
+  locale_gen:
+    name: "{{ locale }}"
+    state: present
+
+- name: "set default system locale to {{ locale }}"
+  lineinfile:
+    line: "LC_ALL={{ locale }}"
+    dest: /etc/default/locale

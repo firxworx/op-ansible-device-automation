@@ -1,0 +1,20 @@
+---
+# base role - defaults/main.yml - default values for role vars
+
+locale: en_US.UTF-8
+tz: Etc/UTC
+
+# apt_packages documentation:
+# - net-tools includes useful tools like `ifconfig`
+# - rsync is useful for sync'ing files + folders to the device
+# - psmisc includes useful utilities like `killall`
+# - rsyslog + rsyslog-gnutls enable sending system logs to remote targets
+
+apt_packages:
+  - ntp
+  - tzdata
+  - rsyslog
+  - rsyslog-gnutls
+  - net-tools
+  - rsync
+  - psmisc
