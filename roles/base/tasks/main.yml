@@ -9,6 +9,9 @@
 
 - name: install base apt packages
   import_tasks: apt.yml
+
+- name: configure ufw firewall
+  import_tasks: ufw.yml
 #
 # - name: ensure required users and groups
 #  import_tasks: users.yml

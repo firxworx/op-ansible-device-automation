@@ -9,6 +9,10 @@ tz: Etc/UTC
 # - rsync is useful for sync'ing files + folders to the device
 # - psmisc includes useful utilities like `killall`
 # - rsyslog + rsyslog-gnutls enable sending system logs to remote targets
+# - ufw is a universal firewall (a typical choice for ubuntu servers)
+# - fail2ban w/ default config helps mitigate ssh brute force attacks
+# - openssl provides tools for security + cryptography
+# - ca-certificates adds common ca (certificate authority) certificates
 
 apt_packages:
   - ntp
@@ -18,3 +22,14 @@ apt_packages:
   - net-tools
   - rsync
   - psmisc
+  - ufw
+  - fail2ban
+  - openssl
+  - ca-certificates
+
+ufw_policy_default:
+  - { direction: "incoming", policy: "deny" }
+  - { direction: "outgoing", policy: "allow" }
+
+ufw_rules_ssh:
+  - { rule: "allow", port: '{{ ssh_port | default("22") }}', protocol: "tcp" }

@@ -1,0 +1,29 @@
+---
+# base role - tasks/ufw.yml - configure ufw firewall
+
+- name: configure ufw default policy
+  ufw:
+    direction: "{{ item.direction }}"
+    policy: "{{ item.policy }}"
+  with_items: "{{ ufw_policy_default }}"
+  notify:
+    - restart ufw
+
+- name: configure ufw rules for ssh
+  ufw:
+    rule: "{{ item.rule }}"
+    port: "{{ item.port }}"
+    proto: "{{ item.protocol }}"
+  with_items: "{{ ufw_rules_ssh }}"
+  notify:
+    - restart ufw
+
+- name: enable ufw logging
+  ufw:
+    logging: on
+  notify:
+    - restart ufw
+
+- name: enable ufw
+  ufw:
+    state: enabled

@@ -17,7 +17,7 @@
   apt:
     upgrade: yes
 
-- name: install common packages
+- name: install base packages
   apt:
     pkg: "{{ apt_packages }}"
     state: present
