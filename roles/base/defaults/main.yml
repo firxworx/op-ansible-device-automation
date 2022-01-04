@@ -14,7 +14,7 @@ tz: Etc/UTC
 # - openssl provides tools for security + cryptography
 # - ca-certificates adds common ca (certificate authority) certificates
 
-apt_packages:
+base_apt_packages:
   - ntp
   - tzdata
   - rsyslog

@@ -19,6 +19,6 @@
 
 - name: install base packages
   apt:
-    pkg: "{{ apt_packages }}"
+    pkg: "{{ base_apt_packages }}"
     state: present
     autoremove: yes
