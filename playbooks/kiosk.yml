@@ -1,0 +1,14 @@
+- name: configure target intel sbc/soc boards to become olivia-party kiosks
+  hosts: intelboards
+  become: yes
+  vars:
+    kiosk_url: "https://projects.firxworx.com/olivia-joystick-nextjs"
+  roles:
+    - base
+    - xserver
+    - chromium
+    # - kiosk
+  tasks:
+    - name: done
+      debug:
+        msg: success
