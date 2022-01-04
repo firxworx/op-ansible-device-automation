@@ -1,0 +1,23 @@
+---
+# chromium role - tasks/main.yml - main task orchestration for this role
+
+- name: ensure audio packages are present (including recommended packages)
+  apt:
+    pkg: "{{ audio_apt_packages }}"
+    state: present
+    autoremove: yes
+    install_recommends: yes
+
+- name: ensure speech/tts packages are present (including recommended packages)
+  apt:
+    pkg: "{{ speech_apt_packages }}"
+    state: present
+    autoremove: yes
+    install_recommends: yes
+
+- name: ensure chromium browser packages are present (including recommended packages)
+  apt:
+    pkg: "{{ chromium_apt_packages }}"
+    state: present
+    autoremove: yes
+    install_recommends: yes

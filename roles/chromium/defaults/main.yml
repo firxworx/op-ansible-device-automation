@@ -1,0 +1,29 @@
+# chromium role - defaults/main.yml - default values for role vars
+
+# chromium_packages documentation:
+# - chromium-browser installs chromium, the open-source version of the google chrome web browser
+# - unclutter is hides the mouse cursor for a kiosk-style touch-screen ux (e.g. `unclutter & chromium-browser`)
+
+# audio_packages documentation:
+# - alsa* relates to ALSA, a kernel-level audio mixer that manages the sound card(s)
+# - alsa-base provides ALSA support (to reload alsa during dev/debugging: `sudo alsa force-reload`)
+# - alsa-utils provides configuration utilities for ALSA + sound output devices including `alsamixer` + `amixer`
+# - pulseaudio is a userland software mixer that mixes audio from different apps and feeds them into ALSA (see also: `start-pulseaudio-x11`)
+
+# speech_packages documentation:
+# - espeak provides voices and tools for speech synthesis i.e. support for text-to-speech (tts)
+# - espeak-ng is a fork of espeak; the ubuntu package will create symlinks for the 'espeak' command
+# - chromium on linux requires the voices from espeak/espeak-ng to power the html5 speech synthesis api
+# - for more details on espeak-ng refer to: <https://github.com/espeak-ng/espeak-ng>
+
+chromium_apt_packages:
+  - chromium-browser
+  - unclutter
+
+audio_apt_packages:
+  - alsa-base
+  - alsa-utils
+  - pulseaudio
+
+speech_apt_packages:
+  - espeak-ng
