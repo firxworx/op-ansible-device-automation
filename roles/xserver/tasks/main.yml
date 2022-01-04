@@ -1,0 +1,9 @@
+---
+# xserver role - tasks/main.yml - main task orchestration for this role
+
+- name: ensure xserver packages are present (no-recommends)
+  apt:
+    pkg: "{{ xserver_apt_packages }}"
+    state: present
+    autoremove: yes
+    install_recommends: no

@@ -1,0 +1,25 @@
+---
+# xserver role - defaults/main.yml - default values for role vars
+
+# xserver_apt_packages documentation:
+# - xserver and related packages power the 'x window system' graphical environment
+# - xinit provides tools to disable x input devices including `xinput-calibration`
+# - xterm is a terminal emulator that runs in x
+# - meta-utils* are utilities for managing graphics hardware and drivers
+# - mesa-utils-extra provides additional diagnostic tools such as `es2gears`
+
+# note: if you are running an arm-based soc/sbc you may require additional packages --
+# - mali* related packages to support the gpu (e.g. mali-x11, mali-fbdev, etc)
+# - additional xserver packages (e.g. xserver-xorg-video-armsoc, xserver-xorg-dev)
+# - libudev-dev may be a dependency of other tools/packages
+
+xserver_apt_packages:
+  - xserver-xorg-core
+  - xserver-xorg-video-all
+  - xserver-xorg-input-all
+  - xinit
+  - x11-xserver-utils
+  - xinput
+  - mesa-utils
+  - mesa-utils-extra
+  - xterm
