@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# bootstrap the kiosk by starting x and executing the script to launch the web browser
+
+KIOSK_USER=$(whoami)
+
+/usr/bin/startx /etc/X11/Xsession /home/$KIOSK_USER/launch-browser.sh -- :0 -nocursor

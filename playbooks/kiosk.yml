@@ -7,7 +7,7 @@
     - base
     - xserver
     - chromium
-    # - kiosk
+    - kiosk
   tasks:
     - name: done
       debug:

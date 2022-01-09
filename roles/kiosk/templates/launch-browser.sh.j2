@@ -1,0 +1,61 @@
+#!/bin/bash
+
+KIOSK_URL="{{ kiosk_url }}"
+
+# disable display power management system (disables automatic standby that could disrupt the display)
+xset -dpms
+
+# turn off screen blanking
+xset s noblank
+
+# turn off screensaver
+xset s off
+
+# support terminating the x server with the ctrl+alt+backspace hotkey sequence
+setxkbmap -option terminate:ctrl_alt_bksp
+
+# output debug logs for development
+mkdir -p $HOME/kiosk-debug
+xrandr -q > $HOME/kiosk-debug/screens.debug.log
+xinput list > $HOME/kiosk-debug/xinput-list.debug.log
+
+# docs for using xrandr to set specific resolution and refresh rate:
+# https://wiki.ubuntu.com/X/Config/Resolution
+
+# start pulseaudio
+killall pulseaudio > /dev/null 2>&1
+start-pulseaudio-x11
+
+# hide mouse cursor with unclutter utility
+killall unclutter > /dev/null 2>&1
+unclutter -idle 0 -root &
+
+# launch chromium with a series of flags that support the kiosk use-case
+#
+# - depending on your hardware, the required values for various flags (e.g. window-size, alsa-output-device) may differ
+# - removing the `--kiosk \` and `--disable-infobars \` flags can be helpful for dev + testing scenarios
+# - the flags assume a private deployment (i.e. kiosk not in public); please be aware that certain flags/values may impact security
+
+chromium-browser $KIOSK_URL \
+  --kiosk \
+  --incognito \
+  --allow-file-access-from-files \
+  --window-position=0,0 \
+  --window-size=1366,768 \
+  --force-device-scale-factor=1.0 \
+  --start-fullscreen \
+  --fast \
+  --fast-start \
+  --audio-buffer-size=4096 \
+  --alsa-output-device="plughw:CARD=Device,DEV=0" \
+  --no-first-run \
+  --noerrdialogs \
+  --overscroll-history-navigation=0 \
+  --disable-infobars \
+  --disable-pinch \
+  --disable-translate \
+  --disable-features=TranslateUI,TouchpadOverscrollHistoryNavigation \
+  --disable-breakpad \
+  --disable-popup-blocking \
+  --disable-sync \
+  --password-store=basic

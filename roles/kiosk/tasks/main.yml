@@ -1,0 +1,48 @@
+---
+# kiosk role - tasks/main.yml - main task orchestration for this role
+
+- name: ensure bootstrap-kiosk.sh is copied to bootstrap the kiosk with xserver and web browser
+  template:
+    src: bootstrap-kiosk.sh.j2
+    dest: "/home/{{ ansible_user }}/bootstrap-kiosk.sh"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
+
+- name: ensure launch-browser.sh is copied to launch chromium at the kiosk_url
+  template:
+    src: launch-browser.sh.j2
+    dest: "/home/{{ ansible_user }}/launch-browser.sh"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
+
+- name: ensure agetty on systemd service.d/ directory exists for tty1
+  file:
+    path: "/etc/systemd/system/getty@tty1.service.d"
+    state: directory
+
+- name: "override default agetty on systemd to autologin {{ ansible_user }}"
+  template:
+    src: getty-autologin-override.conf.j2
+    dest: /etc/systemd/system/getty@tty1.service.d/override.conf
+    owner: root
+    group: root
+
+- name: ensure kiosk user's bash_profile exists with 0644 permissions
+  file:
+    state: touch
+    path: "/home/{{ ansible_user }}/.bash_profile"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    access_time: preserve
+    modification_time: preserve
+    mode: 0644
+
+- name: ensure kiosk user's bash_profile includes block to conditionally execute bootstrap-kiosk.sh
+  blockinfile:
+    dest: "/home/{{ ansible_user }}/.bash_profile"
+    content: |
+      if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
+        /home/{{ ansible_user }}/bootstrap-kiosk.sh
+      fi
