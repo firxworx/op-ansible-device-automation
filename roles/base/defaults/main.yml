@@ -26,6 +26,7 @@ base_apt_packages:
   - fail2ban
   - openssl
   - ca-certificates
+  - network-manager # includes nmcli for wifi configuration
 
 ufw_policy_default:
   - { direction: "incoming", policy: "deny" }
