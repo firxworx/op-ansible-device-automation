@@ -1,10 +1,11 @@
 ---
 # xserver role - defaults/main.yml - default values for role vars
 
-# xserver_apt_packages documentation:
+# package-specific notes:
 # - xserver and related packages power the 'x window system' graphical environment
 # - xinit provides tools to disable x input devices including `xinput-calibration`
 # - xterm is a terminal emulator that runs in x
+# - x11-utils adds commands useful for debugging including `xdpyinfo` @see <https://packages.debian.org/unstable/x11-utils>
 # - meta-utils* are utilities for managing graphics hardware and drivers
 # - mesa-utils-extra provides additional diagnostic tools such as `es2gears`
 
@@ -19,6 +20,7 @@ xserver_apt_packages:
   - xserver-xorg-input-all
   - xinit
   - x11-xserver-utils
+  - x11-utils
   - xinput
   - mesa-utils
   - mesa-utils-extra
