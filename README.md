@@ -133,7 +133,7 @@ When the `~/launch-browser.sh` script runs, it saves the output of useful troubl
 
 If the kiosk fails to boot into chromium with the target app/website running full-screen at the proper resolution, and/or drops back to the Terminal CLI, the log for the x session can be found in:
 
-`~/.local/share/xorg/Xorg.0.log` ( /home/partybot/.local/share/xorg/Xorg.0.log)
+`~/.local/share/xorg/Xorg.0.log`
 
 The `lshw` (list hardware) command can provide more information about your graphics card:
 
@@ -141,16 +141,15 @@ The `lshw` (list hardware) command can provide more information about your graph
 sudo lshw -c display
 ```
 
-Check the contents of`/etc/X11` -- `/etc/X11/Xwrapper.config`
+### Troubleshooting Flat-Panel TV's + Large Displays
 
-```ini
-allowed_users=anybody
-needs_root_rights=yes
-```
+If alignment of the picture is off (e.g. a small portion of the picture is cut off on the left and right sides) and you are using a flat-panel TV as a display, check your TV's settings for possible configuration points that might fix the alignment.
 
-If alignment of the picture is off (e.g. a small portion of the picture is cut off on the left and right sides) and you are using a flat-panel TV as a display, check your TV's settings search the web + forums for more information particular to your make + odel.
+Due to the huge variety of makes + models, it is recommended that you search the web + forums for more information particular to your device.
 
-- On a Samsung TV, "Screen Resolution" changed from "16:9" to "Screen Fit" fixed the "cut off"
+As an example of a setting that was changed on a 55" Samsung Smart TV that was manufactured in 2012:
+
+- "Screen Resolution" setting was changed from "16:9" to "Screen Fit" to fix "cut off"
 
 ## License
 
