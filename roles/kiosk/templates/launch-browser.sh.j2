@@ -1,6 +1,25 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -o errexit
+
+trap 'echo "Aborting script due to errexit on line $LINENO. Exit code: $?" >&2' ERR
+
+set -o nounset
+set -o pipefail
 
 KIOSK_URL="{{ kiosk_url }}"
+
+wait_for_url() {
+  echo "Checking for connectivity to URL: $1"
+  timeout --foreground -s TERM 30s bash -c \
+    'while [[ "$(curl -s -o /dev/null -m 3 -L -w ''%{http_code}'' ${0})" != "200" ]];\
+    do echo "Waiting for ${0}" && sleep 5;\
+    done' ${1}
+  echo "${1} - OK!"
+}
+
+# wait for connection
+wait_for_url "{{ kiosk_url }}"
 
 # disable display power management system (disables automatic standby that could disrupt the display)
 xset -dpms
@@ -14,10 +33,24 @@ xset s off
 # support terminating the x server with the ctrl+alt+backspace hotkey sequence
 setxkbmap -option terminate:ctrl_alt_bksp
 
-# output debug logs for development
-mkdir -p $HOME/kiosk-debug
-xrandr -q > $HOME/kiosk-debug/screens.debug.log
-xinput list > $HOME/kiosk-debug/xinput-list.debug.log
+# setup log paths
+LOGS_PATH="$HOME/kiosk-debug"
+DISPLAY_LOG="$LOGS_PATH/display-xrandr.log"
+
+# write diagnostic/troubleshooting logs
+mkdir -p $LOGS_PATH
+echo "------------" > $DISPLAY_LOG
+echo "xrandr -q output"
+echo "------------" >> $DISPLAY_LOG
+xrandr -q >> $DISPLAY_LOG
+echo "------------" >> $DISPLAY_LOG
+echo "xrandr output" >> $DISPLAY_LOG
+echo "------------" >> $DISPLAY_LOG
+xrandr >> $DISPLAY_LOG
+echo "------------" >> $DISPLAY_LOG
+xinput list > $LOGS_PATH/xinput-list.log
+xdpyinfo > $LOGS_PATH/xdpyinfo.log
+echo $DISPLAY > $LOGS_PATH/env-DISPLAY.log
 
 # docs for using xrandr to set specific resolution and refresh rate:
 # https://wiki.ubuntu.com/X/Config/Resolution
@@ -41,7 +74,7 @@ chromium-browser $KIOSK_URL \
   --incognito \
   --allow-file-access-from-files \
   --window-position=0,0 \
-  --window-size=1366,768 \
+  --window-size={{ display_width }},{{ display_height }} \
   --force-device-scale-factor=1.0 \
   --start-fullscreen \
   --fast \

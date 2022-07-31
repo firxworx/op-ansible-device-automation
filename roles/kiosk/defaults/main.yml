@@ -1,0 +1,9 @@
+---
+# kiosk role - vars/main.yml - role vars
+
+# url of app or website for the chromium web browser to launch into
+kiosk_url: https://bbc.co.uk
+
+# display resolution in required format {digits}x{digits} (must match regex /[0-9]+x[0-9]+/)
+# a common resolution is 1920x1080 for the popular 1080p "Full HD" screens with a 16:9 aspect ratio
+display_resolution: 1920x1080

@@ -1,8 +1,9 @@
-- name: configure target intel sbc/soc boards to become olivia-party kiosks
+- name: configure target intel-powered devices to become olivia-party kiosks
   hosts: intelboards
-  become: yes
+  become: true
   vars:
     kiosk_url: "https://projects.firxworx.com/olivia-joystick-nextjs"
+    display_resolution: 1920x1080 # string in {digits}x{digits} format e.g. "1920x1080", "1366x768", etc.
   roles:
     - base
     - xserver
