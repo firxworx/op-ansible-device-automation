@@ -1,50 +1,60 @@
-# \[ olivia-party \] olivia-hardware-ansible
+# \[ olivia-party \] op-ansible-device-automation
 
-## Automated configuration of touchscreen kiosks
+Automate the configuration and deployment of _OP Accessibility Devices_ (OPADs): hackable web kiosks that provide a foundaton for creating customized tools and toys for users with physical disabilities.
 
-The [Ansible](https://www.ansible.com/) roles + playbooks in this repository automate the configuration of commodity PC/SoC/SBC hardware to become hackable and extensible browser-based touchscreen kiosks.
+This repo is part of the Olivia Party (OP) Accessibility Project.
 
-The code is well-commented and released under open source license so that it may be extended in support of a wide range of potential use-cases.
+The [Ansible](https://www.ansible.com/)-driven automations found in this repo will transform commodity PC's and low-cost boards into linux-based devices with user interfaces provided via local web applications run by the [Chromium](https://chromium.org) web browser.
 
-Features:
+Many parts of this project are readily transferable to commercial applications. You are free to use and modify the code as you wish under the terms of the permissive Apache 2.0 open source license. Use at your own risk!
 
-- Chromium is started in kiosk-mode alongside a number of cli tweaks that "lock" the user into the web app
-- Minimal footprint install consisting of xserver + Chromium; graphical environments such as gdm3 are omitted to save on resources
-- The configured device supports USB input devices (joysticks, keyboards, etc), audio output, and text-to-speech
+## Feature Summary
 
-A number of blog articles and forum threads exist that detail how to configure linux-based SBC's such as Raspberry Pi to become web kiosks. This project implements a recipe that works, and thanks to ansible, it is executable via a single command.
+OPAD operates like a web kiosk and boots directly into the web application that serves as its UI (you can also boot directly to the URL of any website).
 
-## Introduction
+- Connect touchscreens, joysticks, keyboards, and custom-built input devices via USB
+- Out-of-the-box support for audio and text-to-speech, including the HTML5 speech synthesis API
+- Create hardware-accelerated 3D interfaces and experiences using WebGL and the latest browser capabilities
+- Take advantage of broad support for Bluetooth, WiFi, and other options for connectivity thanks to Ubuntu Linux
 
-This repository is home to the documentation and configuration of hardware devices related to the [OliviaParty](https://olivia.party) project. The project aims to enable the creation of cost-effective custom accessibility solutions for users with disabilities.
+Special considerations:
 
-One of the project's working hardware prototypes is a kiosk-like device that enables a user with severe physical disabilities to interact with a custom web application using inputs that include a touchscreen, joystick, and buttons.
+- Touchscreen users are "locked" into the interface: users cannot smudge or swipe out nor can they activate menus from the browser or OS
+- The combination of xserver + Chromium that runs the UI has a smaller footprint and requires less resources vs. heavier-weight linux graphical environments like gdm3
 
-The OliviaParty device boots directly into a custom web application (URL) run by the open-source [Chromium](https://www.chromium.org/) web browser started in _kiosk mode_.
-
-A number of additional configuration tweaks are implemented that disable various features and behaviours of Chromium that might interfere with the kiosk use-case. For example, the _swipe to go forward or back_ feature is disabled because it risks disrupting gesture-support implemented by web apps, and because it increases the risk that a user can "break out" of the kiosk UI.
+You are free to customize the configuration to suit your use case.
 
 ## Supported Hardware
 
 The ansible playbooks as-implemented should broadly support intel-based devices running a clean server installation of the free linux-based [Ubuntu](https://ubuntu.com/) 20.04 LTS or 22.04 LTS operating system.
 
-Additional architectures, hardware profiles, and/or software can be supported with additional customization.
+Most modern touch screens are supported by Ubuntu running on PC. In most cases, no special drivers are required to use typical touch screens with video input and USB output. The OS will recognize touchscreens connected via USB as pointing devices and will treat them similar to a USB mouse.
 
-### Project Hardware Profile
+Display orientation, resolution, and more can be changed by customizing the x server configuration. Search for resources related to xorg.conf for more information, and refer to xserver role in `roles/xserver`. Be careful to ensure your configuration reflects the capabilities of your display as it is possible to cause damage to your hardware in certain cases.
 
-The specific hardware run by this project is as follows:
+Additional architectures, hardware profiles, and/or software can be supported with additional customization of the ansible roles and playbooks in this repo.
 
-- [UP Board](https://up-board.org/) x86 single-board-computer (SBC) powered by Intel Atom
-- ASUS touchscreen w/ HDMI + USB interfaces that identifies itself to the OS as "ELON Touchscreen" and runs at 1366x768 resolution
+### Tested Hardware Profiles
+
+The ansible playbook in this repo has been executed successfully on the following hardware.
+
+Computers:
+
+- Lenovo ThinkCentre Tiny PC with Intel i5-6500T CPU
+- [UP Board](https://up-board.org/) x86 single-board-computer (SBC) with Intel Atom CPU
+
+Input devices:
+
+- ASUS touchscreen w/ HDMI + USB interfaces
+  - This particular display was identified by the OS as "ELON Touchscreen" and runs at 1366x768 resolution
 - Generic USB external audio adapter with advertised support for Linux
 - Generic USB joystick/gamepad controller with an arcade-style Joystick and buttons
 - Generic USB mouse + keyboard (optional)
-
-No special drivers are required to use this particular touch screen. The OS recognizes it as a pointing device when connected via USB (similar to a USB mouse). The touchscreen is used is in landscape orientation. Portrait orientation can be supported by further customizing the x server configuration.
+- Low-cost USB WiFi dongle with advertised support for Linux
 
 ## About Ansible
 
-Ansible is a popular free and open-source IT automation platform that enables hardware configurations to be defined in a clean and declarative yaml-based syntax that provides the benefit of self-documenting code.
+Ansible is a popular free and open-source IT automation platform that enables hardware configurations to be defined in a declarative and clean yaml-based syntax that delivers the benefit of self-documenting code.
 
 The Ansible software can be installed Win/Mac/Linux computers to enable them to serve as a _control node_ capable of executing playbooks against an _inventory_ of target devices. Ansible connects to the target devices using [ssh](https://en.wikipedia.org/wiki/Secure_Shell).
 
@@ -52,37 +62,41 @@ Ansible and its ecosystem of powerful modules are [well-documented](https://docs
 
 ## Running the Project
 
-Follow the steps below to deploy your own touchscreen kiosk.
+Follow the steps in this section to deploy your own _OP Accessibility Device_ / web kiosk.
 
-> Security Note / Disclaimer: this project assumes that the kiosk will be deployed in a physically private and secure environment on a private internal network. Public-facing, internet-facing, or otherwise production-grade device deployments are not part of the scope of this project. Use at your own risk.
+> Security Note / Disclaimer: this project assumes that the kiosk will be deployed in a physically private and secure environment on a private internal network. Public-facing, internet-facing, or otherwise production-grade device deployments are not part of the scope of this project. Use at your own risk!
 
 ### Prerequisites
 
-#### On your control machine
+#### On the control machine
 
-This project assumes the control machine is a linux/unix system or MacOS. Windows PC's are supported via WSL2, Microsoft's official _Windows Subsystem for Linux_.
+The _control machine_ is the "puppetmaster": the laptop or desktop that will run the ansible playbook against your target _hosts_ (devices).
 
-- Ensure that python3 is installed (`which python3` should return output)
-- Install [Ansible](https://docs.ansible.com)
-- Verify that you can successfully execute `ansible --version` in your Terminal (command line) app
+The control machine is assumed to be running a modern linux/unix distribution or MacOS. PC's running Windows are advised to run the project in linux via WSL2, Microsoft's official _Windows Subsystem for Linux_. Ubuntu is recommended.
+
+Ensure the following prerequisites are met:
+
+- python3 is installed (e.g. confirm `which python3` and `python3 --version` returns output)
+- [Ansible](https://docs.ansible.com) is installed per its documentation
+- Verify that you can successfully execute `ansible --version` in your Terminal
 - Clone or download the source code from this repo
-- Ensure that you have SSH installed
-  - Generate an SSH key pair if you wish to connect to your target devices using key-based authentication
+- You have an SSH client installed
+- You have generated an SSH key pair that you can use to connect to your target devices
 
-#### On your target devices
+#### On target device(s)
 
-- Plug in all required USB hardware devices/peripherals to the device
-- Install a fresh server (or _minimal_) install image of the [Ubuntu 20.04 LTS](https://releases.ubuntu.com/20.04/) or [Ubuntu 22.04 LTS](https://releases.ubuntu.com/20.04/) operating system
-  - Ensure that an ssh server (OpenSSH) is installed
-  - Create a non-root user account that has root privileges via `sudo` (this can be done during the install process)
-  - Ensure the user can authenticate over ssh via password authentication (or configure key-based authentication with your control machine)
-- Ensure the control machine can connect to your target device(s) via the network
+- Plug in all required USB devices and peripherals to the device
+- Install a fresh server install image (often referred to as _minimal_) of the [Ubuntu 20.04 LTS](https://releases.ubuntu.com/20.04/) or [Ubuntu 22.04 LTS](https://releases.ubuntu.com/20.04/) operating system
+  - Ensure that an ssh server (e.g. OpenSSH) is installed
+  - Create a non-root user account that has root privileges via `sudo` (this can often be done during the install process)
+  - Confirm that you can connect to the target device as your non-root user via password or key-based authentication from your control machine
+- Ensure the control machine and targets are connected to the same network and that the control machine can connect to them
 
 ### Ansible Inventory
 
 Revise `inventory/hosts` to specify your target board(s). Replace the list under the `[intelboards]` section with the IP address(es) or FQDN(s) of your target device(s).
 
-Targets are assumed to be running a clean install of Ubuntu 20.04 server (no GUI), including an ssh server configured to support password authentication by the user that ansible will use to connect to each target.
+Targets are assumed to be running a clean install of Ubuntu server (no GUI), including an ssh server configured to support password authentication by the user that ansible will use to connect to each target.
 
 Replace the `ansible_user` and `ansible_become_password` under the `[intelboards:vars]` sections with the credentials of a user that exists on the target(s) and has root privileges via sudo.
 
@@ -104,7 +118,7 @@ Use the `ansible-playbook` command to execute the kiosk playbook:
 ansible-playbook kiosk.yml
 ```
 
-## Adding Displays
+## Managing Displays & Configuration
 
 System configuration files for x can be referenced at the following paths:
 
@@ -122,9 +136,11 @@ Host-specific overrides to the system configuration should be added to:
 /etc/X11/xorg.conf.d
 ```
 
-Generally you should not make revisions to folders or files under `/usr/lib`.
+In most cases you should not make revisions to files or folders under `/usr/lib`.
 
-## Troubleshooting Displays
+### Troubleshooting Displays
+
+With so many makes and models of displays, there are a lot of things that could go wrong. This section provides some tips to help you if the x server fails to start, exits prematurely, or if there are issues with the picture.
 
 When the `~/launch-browser.sh` script runs, it saves the output of useful troubleshooting commands to log files in the: `~/kiosk-debug/` folder.
 
@@ -141,18 +157,18 @@ The `lshw` (list hardware) command can provide more information about your graph
 sudo lshw -c display
 ```
 
-### Troubleshooting Flat-Panel TV's + Large Displays
+For more troubleshooting information, check the xorg docs including key articles such as: <https://xorg-team.pages.debian.net/xorg/howto/use-xrandr.html>.
 
-If alignment of the picture is off (e.g. a small portion of the picture is cut off on the left and right sides) and you are using a flat-panel TV as a display, check your TV's settings for possible configuration points that might fix the alignment.
+### Troubleshooting TV's
 
-Due to the huge variety of makes + models, it is recommended that you search the web + forums for more information particular to your device.
+If you are using a flat-panel TV as a display and the alignment of the picture is off, e.g. a portion of the picture is cut off on the left and right sides, make sure to check through your TV's settings for possible configuration options that might correct the situation.
 
-As an example of a setting that was changed on a 55" Samsung Smart TV that was manufactured in 2012:
+There is a huge amount of variance between TV makes and models. It is recommended that you search the web + forums for more information specific to your device.
 
-- "Screen Resolution" setting was changed from "16:9" to "Screen Fit" to fix "cut off"
+An example of a device-specific setting related to an alignment issue with a 55" Samsung Smart TV manufactured in 2012:
+
+- "Screen Resolution" setting was changed from "16:9" to "Screen Fit" to resolve a "sides slightly cut off" issue
 
 ## License
 
 Released under Apache 2.0 license by Kevin Firko (@firxworx) - hello@firxworx.com
-
-Use at your own risk!
