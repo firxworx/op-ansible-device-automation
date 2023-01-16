@@ -1,16 +1,24 @@
 # \[ olivia-party \] op-ansible-device-automation
 
-Automate the configuration and deployment of _OP Accessibility Devices_ (OPADs): hackable web kiosks that provide a foundaton for creating customized tools and toys for users with physical disabilities.
+Automate the configuration and deployment of _OP Accessibility Devices_ (OPADs): hackable web kiosks that provide a foundation for creating customized tools and toys for users with physical disabilities.
 
-This repo is part of the Olivia Party (OP) Accessibility Project.
+This repo is associated with the Olivia Party (OP) Accessibility Project.
 
 The [Ansible](https://www.ansible.com/)-driven automations found in this repo will transform commodity PC's and low-cost boards into linux-based devices with user interfaces provided via local web applications run by the [Chromium](https://chromium.org) web browser.
 
 Many parts of this project are readily transferable to commercial applications. You are free to use and modify the code as you wish under the terms of the permissive Apache 2.0 open source license. Use at your own risk!
 
+## Audience & System Requirements
+
+Target audience: a level of technical knowledge that includes working familiarity with Linux is recommended.
+
+System requirements (control machine): Linux, MacOS, or Windows running Linux via WSL2
+
 ## Feature Summary
 
 OPAD operates like a web kiosk and boots directly into the web application that serves as its UI (you can also boot directly to the URL of any website).
+
+Features:
 
 - Connect touchscreens, joysticks, keyboards, and custom-built input devices via USB
 - Out-of-the-box support for audio and text-to-speech, including the HTML5 speech synthesis API
@@ -26,9 +34,9 @@ You are free to customize the configuration to suit your use case.
 
 ## Supported Hardware
 
-The ansible playbooks as-implemented should broadly support intel-based devices running a clean server installation of the free linux-based [Ubuntu](https://ubuntu.com/) 20.04 LTS or 22.04 LTS operating system.
+The ansible playbooks as-implemented should broadly support intel-based devices running a clean server installation of the free linux-based [Ubuntu](https://ubuntu.com/) 22.04 LTS operating system.
 
-Most modern touch screens are supported by Ubuntu running on PC. In most cases, no special drivers are required to use typical touch screens with video input and USB output. The OS will recognize touchscreens connected via USB as pointing devices and will treat them similar to a USB mouse.
+Most modern touch screens are supported by Ubuntu. In most cases, no special drivers are required to use typical touch screens with video input and USB output. The OS typically recognizes touchscreens connected via USB as pointing devices and will treat them similar to a USB mouse.
 
 Display orientation, resolution, and more can be changed by customizing the x server configuration. Search for resources related to xorg.conf for more information, and refer to xserver role in `roles/xserver`. Be careful to ensure your configuration reflects the capabilities of your display as it is possible to cause damage to your hardware in certain cases.
 
@@ -54,9 +62,9 @@ Input devices:
 
 ## About Ansible
 
-Ansible is a popular free and open-source IT automation platform that enables hardware configurations to be defined in a declarative and clean yaml-based syntax that delivers the benefit of self-documenting code.
+Ansible is a popular free and open-source IT automation platform that enables hardware configurations to be defined in a clean and declarative yaml-based syntax that promotes self-documented code.
 
-The Ansible software can be installed Win/Mac/Linux computers to enable them to serve as a _control node_ capable of executing playbooks against an _inventory_ of target devices. Ansible connects to the target devices using [ssh](https://en.wikipedia.org/wiki/Secure_Shell).
+Installing Ansible on a computer enables it to serve as a _control node_ that can execute _Ansible Playbooks_ against target devices in its _inventory_. Ansible connects to targets using [ssh](https://en.wikipedia.org/wiki/Secure_Shell).
 
 Ansible and its ecosystem of powerful modules are [well-documented](https://docs.ansible.com/). Refer to the [Getting Started](https://docs.ansible.com/ansible/latest/user_guide/index.html#getting-started) guide to learn core concepts and how to install it on your system.
 
@@ -68,11 +76,9 @@ Follow the steps in this section to deploy your own _OP Accessibility Device_ / 
 
 ### Prerequisites
 
-#### On the control machine
+#### Control Machine
 
-The _control machine_ is the "puppetmaster": the laptop or desktop that will run the ansible playbook against your target _hosts_ (devices).
-
-The control machine is assumed to be running a modern linux/unix distribution or MacOS. PC's running Windows are advised to run the project in linux via WSL2, Microsoft's official _Windows Subsystem for Linux_. Ubuntu is recommended.
+The _control machine_ is the "puppetmaster"; it is the computer you use to run OliviaParty playbooks against your target _hosts_.
 
 Ensure the following prerequisites are met:
 
@@ -83,13 +89,13 @@ Ensure the following prerequisites are met:
 - You have an SSH client installed
 - You have generated an SSH key pair that you can use to connect to your target devices
 
-#### On target device(s)
+#### Target(s) for OliviaParty
 
-- Plug in all required USB devices and peripherals to the device
-- Install a fresh server install image (often referred to as _minimal_) of the [Ubuntu 20.04 LTS](https://releases.ubuntu.com/20.04/) or [Ubuntu 22.04 LTS](https://releases.ubuntu.com/20.04/) operating system
-  - Ensure that an ssh server (e.g. OpenSSH) is installed
-  - Create a non-root user account that has root privileges via `sudo` (this can often be done during the install process)
-  - Confirm that you can connect to the target device as your non-root user via password or key-based authentication from your control machine
+- Plug in all USB peripherals and devices into the target machine(s)
+- Install a fresh server install image (often referred to as _minimal_) of the [Ubuntu 22.04 LTS](https://releases.ubuntu.com/22.04/) or [Ubuntu 22.04 LTS](https://releases.ubuntu.com/22.04/) operating system
+  - Ensure that an ssh server is installed (Ubuntu's default is OpenSSH server)
+  - Create a non-root user account that has root privileges via `sudo` (this can typically be done during the install process)
+  - Confirm that you can connect to each target from your control machine via ssh using your password or key-based authentication
 - Ensure the control machine and targets are connected to the same network and that the control machine can connect to them
 
 ### Ansible Inventory
@@ -112,10 +118,10 @@ The `launch-browser.sh.j2` template produces the bash script that launches the c
 
 ### Run the Playbook
 
-Use the `ansible-playbook` command to execute the kiosk playbook:
+Use the `ansible-playbook` command to execute the _Deploy Device_ playbook:
 
 ```sh
-ansible-playbook kiosk.yml
+ansible-playbook deploy-device.yml
 ```
 
 ## Managing Displays & Configuration
