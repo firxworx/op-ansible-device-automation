@@ -1,0 +1,12 @@
+- name: Deploy OliviaParty PartyBoxes in graphical desktop configuration
+  hosts: intelboards
+  become: true
+  roles:
+    - base
+    - xserver
+    - desktop
+    # - chromium
+  tasks:
+    - name: done
+      debug:
+        msg: success

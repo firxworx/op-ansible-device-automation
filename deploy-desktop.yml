@@ -1,0 +1,4 @@
+---
+# master playbook: deploy OliviaParty Player as an app installed on a lightweight ubuntu desktop
+
+- import_playbook: playbooks/op-desktop.yml

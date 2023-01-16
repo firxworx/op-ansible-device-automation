@@ -1,0 +1,93 @@
+---
+# default role - tasks/main.yml - main task orchestration for this role
+
+- name: update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  changed_when: false
+
+- name: ensure kiosk user's bash_profile omits block to execute bootstrap-kiosk.sh (re kiosk-minimal playbook)
+  blockinfile:
+    state: absent
+    dest: "/home/{{ ansible_user }}/.bash_profile"
+    content: |
+      if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
+        /home/{{ ansible_user }}/bootstrap-kiosk.sh
+      fi
+
+- name: install packages for minimal ubuntu mate desktop environment
+  apt:
+    pkg: "{{ minimum_mate_packages }}"
+    state: present
+    autoremove: yes
+
+# Install "foo" and "bar" snaps with common option com=A and specific options fooPar=X and barPar=Y
+# - name: Install "foo" and "bar" with options
+#   community.general.snap:
+#     name:
+#       - foo
+#       - bar
+#     options:
+#       - com=A
+#       - foo:fooPar=X
+#       - bar:barPar=Y
+
+- name: install bluez - ubuntu bluetooth stack
+  community.general.snap:
+    state: present
+    name:
+      - bluez
+
+# todo - autologin as an option
+- name: ensure 60-lightdm-gtk-greeter.conf exists
+  file:
+    state: touch
+    path: "/usr/share/lightdm/lightdm.conf.d/60-lightdm-gtk-greeter.conf"
+    owner: root
+    group: root
+    access_time: preserve
+    modification_time: preserve
+    mode: 0644
+
+- name: "ensure 60-lightdm-gtk-greeter.conf is configured to autologin user {{ ansible_user }}"
+  blockinfile:
+    dest: "/usr/share/lightdm/lightdm.conf.d/60-lightdm-gtk-greeter.conf"
+    content: |
+      [SeatDefaults]
+      greeter-session=lightdm-gtk-greeter
+      autologin-user=partybot
+
+# @todo for ubuntu 22.04 this works however produces a legacy warning
+- name: add gpg key of apt repository for librewolf web browser
+  become: true
+  ansible.builtin.apt_key:
+    url: https://deb.librewolf.net/keyring.gpg
+    state: present
+  tags: librewolf
+
+- name: add apt repository for librewolf web browser
+  become: true
+  ansible.builtin.apt_repository:
+    repo: deb [arch=amd64] http://deb.librewolf.net focal main
+    state: present
+  tags: librewolf
+
+- name: install librewolf web browser
+  become: true
+  ansible.builtin.apt:
+    name: librewolf
+    update_cache: true
+    state: present
+  tags: librewolf
+# https://ameridroid.com/blogs/ameriblogs/how-to-enable-autologin-on-ubuntu-mate-and-similar-distros
+
+# sudo systemctl enable bluetooth.service
+# To start the Bluetooth service, use this command:
+
+# sudo systemctl start bluetooth.service
+
+# needed to
+# modprobe btusb
+# before any results returned for
+# lsmod | grep -i bluetooth

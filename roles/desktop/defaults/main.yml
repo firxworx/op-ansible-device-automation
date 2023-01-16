@@ -1,0 +1,8 @@
+---
+# desktop role - defaults/main.yml - default role vars
+
+minimum_mate_packages:
+  - ubuntu-mate-core
+  # - ubuntu-mate-desktop
+  # - lxqt-core
+  # - sddm

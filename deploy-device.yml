@@ -1,0 +1,4 @@
+---
+# master playbook: deploy OliviaParty Player as a dedicated/standalone hardware device
+
+- import_playbook: playbooks/op-device.yml
