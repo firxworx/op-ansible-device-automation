@@ -4,7 +4,8 @@
 locale: en_US.UTF-8
 tz: Etc/UTC
 
-# apt_packages documentation:
+# apt packages notes/documentation:
+#
 # - net-tools includes useful tools like `ifconfig`
 # - rsync is useful for sync'ing files + folders to the device
 # - psmisc includes useful utilities like `killall`
@@ -15,6 +16,8 @@ tz: Etc/UTC
 # - ca-certificates adds common ca (certificate authority) certificates
 
 base_apt_packages:
+  - apt-transport-https
+  - gnupg2
   - ntp
   - tzdata
   - rsyslog
