@@ -6,3 +6,6 @@ minimum_mate_packages:
   # - ubuntu-mate-desktop
   # - lxqt-core
   # - sddm
+
+# refer to chromium-kiosk.desktop.js (@todo revise to local fs or launch url)
+desktop_kiosk_icon_url: "https://youtube.com"
