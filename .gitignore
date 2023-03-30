@@ -10,6 +10,7 @@ notes/
 
 # secrets
 .env
+.env.*
 secret/
 secrets/
 vault_password
