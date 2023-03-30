@@ -1,18 +1,34 @@
 # \[ olivia-party \] op-ansible-device-automation
 
-Automate the configuration and deployment of _OP Accessibility Devices_ (OPADs): hackable web kiosks that provide a foundation for creating customized tools and toys for users with physical disabilities.
+[Ansible](https://www.ansible.com/) playbooks to automate the provisioning of standalone _OliviaParty Player_ devices.
 
-This repo is associated with the Olivia Party (OP) Accessibility Project.
+Start with a commodity PC or low-cost single-board-computer (SBC) and install the minimal/server release of the Ubuntu linux operating system (no graphical environment). Plug in your display(s) and USB devices then run our playbooks to transform your hardware into a standalone _OliviaParty Player_.
 
-The [Ansible](https://www.ansible.com/)-driven automations found in this repo will transform commodity PC's and low-cost boards into linux-based devices with user interfaces provided via local web applications run by the [Chromium](https://chromium.org) web browser.
+Choose between "device" or "desktop" configurations depending on your use-case:
 
-Many parts of this project are readily transferable to commercial applications. You are free to use and modify the code as you wish under the terms of the permissive Apache 2.0 open source license. Use at your own risk!
+**Device:** install minimal dependencies and configure the system to boot directly into the [Chromium](https://chromium.org) web browser running _OliviaParty Player_ in a locked-down full-screen kiosk mode.
+
+**Desktop:** install _OliviaParty Player_ alongside the lightweight Ubuntu MATE core graphical desktop environment. A shortcut is added to the user's desktop to launch _OliviaParty Player_ as a [Chromium](https://chromium.org)-powered full-screen kiosk app.
+
+Everything is hackable! Enjoy _OliviaParty_ or use this project as a starting point for your next accessibility solution!
+
+You are free to use and modify the code as you wish under the terms of the Apache 2.0 open source license. Use at your own risk!
 
 ## Audience & System Requirements
 
-Target audience: a level of technical knowledge that includes working familiarity with Linux is recommended.
+Target audience: technically-inclined with some experience working with Linux on the command-line.
 
-System requirements (control machine): Linux, MacOS, or Windows running Linux via WSL2
+System requirements (ansible control machine): Linux, MacOS, or Windows running Linux via WSL2.
+
+Hardware requirements (target device): Intel/x86 powered board or PC with adequate memory (4GB minimum; 8GB+ recommended), storage (8GB for device configuration; 32GB for desktop configuration), and CPU/graphics to run Chromium with resources to spare for running _OliviaParty Apps_ (rich web apps).
+
+> This project has been successfully deployed to [UP Board](https://up-board.org/) SBC's powered by Intel Atom processors, as well as older mini/USFF PC's including a Lenovo Thinkcentre Tiny with an Intel 6th-generation processor. Devices with comparable or superior specs should run great.
+
+Reasonably decent graphics/GPU performance is recommended to smoothly run any _OliviaParty Apps_ that feature webGL/3D as well as animated effects + transitions. A base UP Board (Atom x5-Z8350) will work however an UP Squared (Atom x5-E3940) or better will deliver a smoother experience with transitions and resource-hungry apps.
+
+Exact performance requirements are subject to your use-case and the specific apps + features that you will use.
+
+It is possible to modify the roles + playbooks to support ARM and other types of systems. PR's are welcome :)
 
 ## Feature Summary
 
